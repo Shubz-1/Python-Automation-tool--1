@@ -1,0 +1,188 @@
+import os
+import getpass
+
+os.system("clear")
+os.system("tput setaf 3")
+print("\t\t\t\t\t\t\t<-------- YOUR WEICOME MY MENU ---------->")
+print("\t\t\t\t\t\t\t****************")
+os.system("tput setaf 7")
+passwd=getpass.getpass("\t\t\tenter the menu password : ")
+if passwd!="#arth" :
+	os.system("tput setaf 1")
+	print("\t\t\t\t\t incorrect password.....")
+	os.system("tput setaf 7")
+	exit()
+
+os.system("tput setaf 4")
+print("\n\t\t\t\t\t\t\t you have succesfully logged in !!!!!")
+os.system("tput setaf 7")
+lr=input("\n\t\t\twhere would you like to run your menu ? (local/remote) :  ")
+os.system("tput setaf 7")
+
+while True :
+	
+	
+	os.system("tput setaf 2")
+	print("\n\n\t################################## MENU-LIST ######################################")
+	os.system("tput setaf 6")
+
+	print("""
+		
+		\t\t\t\tpress 1: to install hadoop requirement 
+		\t\t\t\tpress 2: to set-up hadoop
+		\t\t\t\tpress 3: to start hadoop service
+		\t\t\t\tpress 4: to configure yum
+		\t\t\t\tpress 5: to test yum command 
+		\t\t\t\tpress 6: to configure web server 
+		\t\t\t\tpress 7: to write web file
+		\t\t\t\tpress 8: to launch your web-page 
+		\t\t\t\tpress 9: to exit
+	     """)
+	
+	os.system("tput setaf 7")
+	p=input("\t\t\t\tenter your choise from above : ")
+
+	os.system("tput setaf 7")
+	if lr=="local" :
+			if int(p)==1 :
+				os.system("rpm -ivh  hadoop-1.2.1-1.x86_64.rpm  --force")
+				os.system("rpm -ivh   jdk-8u171-linux-x64.rpm ")
+			elif int(p)==2 :
+				r=input("\n\t\t\t\twhat would you like to set-up ? (namenode/datanode) :  ")
+				if r=="namenode" :
+					os.system("cp name.txt /etc/hadoop/hdfs-site.xml")
+					os.system("cp name1.txt /etc/hadoop/core-site.xml")
+					os.system("hadoop namenode -format")
+				elif r=="datanode" :
+					os.system("cp base.txt /etc/hadoop/hdfs-site.xml")
+					os.system("cp base1.txt /etc/hadoop/core-site.xml")
+				else :
+					os.system("tput setaf 1")
+					print("\n\t\t\t\tplease check the spelling")
+					os.system("tput setaf 7")
+			elif int(p)==3 :
+				r=input("\n\t\t\t\twhich service do you want to start ? (namenode/datanode) :  ")
+				if r=="namenode" :
+					os.system("systemctl stop firewalld ")
+					os.system("hadoop-daemon.sh start namenode")
+					os.system("jps")
+				elif r=="datanode" :
+					os.system("systemctl stop firewalld ")
+					os.system("hadoop-daemon.sh start datanode")	
+					os.system("jps")
+				else :
+					print("\n\t\t\t\tplease check the spelling")
+			elif int(p)==4 :
+				os.system("source  /root/yum.txt")
+				os.system(" dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm")
+				os.system("dnf install https://download1.rpmfusion.org/free/el/updates/8/x86_64/r/rpmfusion-free-release-8-0.1.noarch.rpm")
+			elif int(p)==5 :
+				os.system("tput setaf 7")
+				h=input("\n\t\t\t\tenter any package name that you want to install for checking : ")
+				os.system("tput setaf 4")
+				os.system("dnf install {}".format(h))
+				os.system("tput setaf 7")
+				os.system("yum list {}".format(h))
+			elif int(p)==6 :
+				os.system("dnf install httdp")
+			elif int(p)==7 : 
+				q=input("\n\t\t\t\tenter file name that you want having extension as html : ")
+				w=input("\n\t\t\t\tenter what you want write in this file  in double code : ")
+				os.system("echo -e {} > {}".format(w,q))
+				os.system("mv {} /var/www/html/".format(q))
+				os.system("systemctl start httpd")
+				os.system("systemctl stop firewalld")
+				os.system("setenforce 0")
+			elif int(p)==8 :
+				n=input("\n\t\t\t\tenter your file name : ")
+				os.system("firefox http://192.168.43.166/{}".format(n))
+			elif int(p)==9 :
+				os.system("tput setaf 7")
+				exit()
+				
+
+			
+	elif lr=="remote" :
+			if int(p)==9 :
+				print("\n\t\t\t\tthanks for using my menu program......")
+				exit()
+
+			ip=input("\n\t\t\t\tenter destination ip adress : ")
+			if int(p)==1 :
+				os.system("ssh {} rpm -ivh  hadoop-1.2.1-1.x86_64.rpm  --force".format(ip))
+				os.system("ssh {} rpm -ivh   jdk-8u171-linux-x64.rpm".format(ip))
+			elif int(p)==2 :
+				r=input("\n\t\t\t\twhat would you like to set-up ? (namenode/datanode) :  ")
+				if r=="namenode" :
+					g=input("\n\t\t\t\tenter the directory name : ")
+					os.system("mkdir /nn")
+					os.system("ssh {} mkdir /nn".format(ip))
+					os.system("scp nr.txt {}:/root".format(ip))
+					os.system("scp nr1.txt {}:/root".format(ip))
+					os.system("ssh {} cp nr.txt /etc/hadoop/hdfs-site.xml".format(ip))
+					os.system("ssh {} cp nr1.txt /etc/hadoop/core-site.xml".format(ip))
+					os.system("ssh {} hadoop namenode -format".format(ip))
+				elif r=="datanode" :
+					g=input("\n\t\t\t\tenter the directory name : ")
+					os.system(" ssh {} mkdir /dn".format(ip))
+					os.system("scp remote.txt {}:/root".format(ip))
+					os.system("scp remote1.txt {}:/root".format(ip))
+					os.system("ssh {} cp remote.txt /etc/hadoop/hdfs-site.xml".format(ip))
+					os.system("ssh {} cp remote1.txt /etc/hadoop/core-site.xml".format(ip))
+				else :
+					print("\n\t\t\t\tplease check the spelling")
+			elif int(p)==3 :
+				r=input("\n\t\t\t\twhich service do you want to start ? (namenode/datanode) :  ")
+				if r=="namenode" :
+					os.system("ssh {} systemctl stop firewalld".format(ip))
+					os.system("ssh {} hadoop-daemon.sh start namenode".format(ip))
+					os.system("ssh {} jps".format(ip))
+				elif r=="datanode" :
+					os.system("ssh {} systemctl stop firewalld".format(ip))
+					os.system("ssh {} hadoop-daemon.sh start datanode".format(ip))
+					os.system("ssh {} jps".format(ip))
+				else :
+					print("\n\t\t\t\tplease check the spelling")
+			elif int(p)==4 :
+				os.system("scp sau.repo {}:/root".format(ip))
+				os.system("ssh {} mv sau.repo  /etc/yum.repos.d/ ".format(ip))
+				q=input("\n\t\t\t\tenter the name of repo 1 : ")
+				x=input("\n\t\t\t\tenter the name of repo 2 : ")
+				os.system("ssh {} yum repolist".format(ip))
+				os.system(" ssh {} yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm".format(ip))
+				os.system("ssh {} yum install https://download1.rpmfusion.org/free/el/updates/8/x86_64/r/rpmfusion-free-release-8-0.1.noarch.rpm".format(ip))
+			elif int(p)==5 :
+				os.system(" tput setaf 7")
+				h=input("\n\t\t\t\tenter any package name that you want to install for checking : ")
+				os.system("tput setaf 4")
+				os.system("ssh {} dnf install {}".format(ip,h))
+				os.system("tput setaf 7")
+				os.system("ssh {} yum list {}".format(ip,h))
+
+			elif int(p)==6 :
+				os.system(" ssh {} dnf install httpd".format(ip))
+
+			elif int(p)==7 :
+				fn=input("\n\t\t\t\tenter file name that you want having extension as html: ")
+				w=input("\n\t\t\t\tenter what you want write in this file in double code   : ")
+				os.system(" echo -e {} > {}".format(w,fn))
+				os.system("scp {} {}:/root".format(fn,ip))
+				os.system(" ssh {} mv {}  /var/www/html/".format(ip,fn))
+				
+
+			elif int(p)==8 :
+				n=input("\n\t\t\t\tenter your file name : ")
+				os.system(" ssh {} systemctl start httpd".format(ip))
+				os.system("ssh {} systemctl stop firewalld".format(ip))
+				os.system("ssh {} setenforce 0".format(ip))
+				os.system("firefox http://{}/{}".format(ip,n))
+				
+			else :
+				os.system(" tput setaf 1")
+				print("\n\t\t\t\tchoise not found......")
+				os.system(" tput setaf 7")
+
+	t=input("\t\t\t\t\tpress enter continue......")
+		
+
+	os.system("tput setaf 7")
